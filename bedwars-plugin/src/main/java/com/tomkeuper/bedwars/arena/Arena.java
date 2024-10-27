@@ -918,6 +918,8 @@ public class Arena implements IArena {
                             .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
                             .replace("%bw_playername%", p.getName())
                             .replace("%bw_player%", p.getDisplayName()
+                            .replace("%bw_on%", String.valueOf(getPlayers().size()))
+                            .replace("%bw_max%", String.valueOf(getMaxPlayers()))
                             )
             );
         }
@@ -927,7 +929,11 @@ public class Arena implements IArena {
                     .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
                     .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
                     .replace("%bw_playername%", p.getName())
-                    .replace("%bw_player%", p.getDisplayName()));
+                    .replace("%bw_player%", p.getDisplayName()
+                    .replace("%bw_on%", String.valueOf(getPlayers().size()))
+                    .replace("%bw_max%", String.valueOf(getMaxPlayers()))
+                    ));
+
         }
 
         if (getServerType() == ServerType.SHARED) {
