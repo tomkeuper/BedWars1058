@@ -66,7 +66,7 @@ public class ChatFormatting implements Listener {
         }
 
         // handle lobby world for multi arena
-        if (BedWars.getServerType() == ServerType.MULTIARENA && p.getWorld().getName().equalsIgnoreCase(BedWars.getLobbyWorld())) {
+        if (BedWars.getServerType() == ServerType.MULTIARENA && Arena.getArenaByIdentifier(p.getWorld().getName()) == null) {
             setRecipients(e, p.getWorld().getPlayers());
         }
 
