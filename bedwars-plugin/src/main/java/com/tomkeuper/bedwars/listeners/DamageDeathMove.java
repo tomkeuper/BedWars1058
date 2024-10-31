@@ -247,7 +247,7 @@ public class DamageDeathMove implements Listener {
                         return;
                     }
 
-                    // if the damageR is the re-spawning player remove protection
+                    // If the damager is the re-spawning player, remove protection
                     BedWarsTeam.reSpawnInvulnerability.remove(damager.getUniqueId());
 
                     LastHit lh = LastHit.getLastHit(p);
