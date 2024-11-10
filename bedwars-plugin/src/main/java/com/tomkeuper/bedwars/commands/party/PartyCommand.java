@@ -213,7 +213,7 @@ public class PartyCommand extends BukkitCommand {
                 }
                 boolean chatEnabled = chatToggle.getOrDefault(p.getUniqueId(), false);
                 chatToggle.put(p.getUniqueId(), !chatEnabled);
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&',"&e&lPARTY &8&l┃ &fParty chat is now " + (chatEnabled ? "&cDisabled" : "&aEnabled") + "&f!"));
+                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_CHAT_ENABLED_DISABLED).replace("%bw_party_chat_status%", chatEnabled ? getMsg(p, Messages.MEANING_DISABLED) : getMsg(p, Messages.MEANING_ENABLED)));
                 break;
             default:
                 sendPartyCmds(p);
