@@ -131,6 +131,7 @@ public class Italian extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eIl proprietario del party è: &7%bw_party_owner%");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"%bw_lang_prefix%&eI membri del party sono:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7%bw_player%");
+        yml.addDefault(Messages.COMMAND_PARTY_CHAT_ENABLED_DISABLED, "&e&lPARTY &8&l┃ &fParty chat is now %bw_party_chat_status% &f!");
         yml.addDefault(Messages.COMMAND_NOT_FOUND_OR_INSUFF_PERMS, "%bw_lang_prefix%&cIl comando non è stato trovato o non hai abbastanza permessi!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Non sei in gioco!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Conto alla rovescia diminuito!");
@@ -230,6 +231,7 @@ public class Italian extends Language {
         yml.addDefault(Messages.FORMAT_PAPI_PLAYER_TEAM_SPECTATOR, "&7[SPETTATORE]");
         yml.addDefault(Messages.MEANING_SHOUT, "shout");
         yml.addDefault(Messages.MEANING_NOBODY, "Nessuno");
+        yml.addDefault(Messages.MEANING_NEVER, "Never");
         yml.addDefault(Messages.MEANING_FULL, "Pieno");
         yml.addDefault(Messages.MEANING_IRON_SINGULAR, "Ferro");
         yml.addDefault(Messages.MEANING_IRON_PLURAL, "Ferro");
@@ -241,7 +243,8 @@ public class Italian extends Language {
         yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Diamanti");
         yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "$");
         yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
-        yml.addDefault(Messages.MEANING_NEVER, "Never");
+        yml.addDefault(Messages.MEANING_ENABLED, "&aEnabled");
+        yml.addDefault(Messages.MEANING_DISABLED, "&cDisabled");
         yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "%bw_lang_prefix%&cNon puoi piazzare blocchi in questa area!");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "%bw_lang_prefix%&cPuoi rompere solo i blocchi che sono stati piazzati dai giocatori!");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&cNon puoi distruggere il tuo letto!");
