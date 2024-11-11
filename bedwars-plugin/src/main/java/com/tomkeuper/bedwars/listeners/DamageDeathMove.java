@@ -315,6 +315,8 @@ public class DamageDeathMove implements Listener {
         Player victim = e.getEntity(), killer = e.getEntity().getKiller();
         ITeam killersTeam = null;
         IArena a = Arena.getArenaByPlayer(victim);
+        Player bedDestroyer = a.getTeam(victim).getBedDestroyer();
+
         if ((BedWars.getServerType() == ServerType.MULTIARENA && BedWars.getLobbyWorld().equals(e.getEntity().getWorld().getName())) || a != null) {
             e.setDeathMessage(null);
         }
@@ -353,6 +355,9 @@ public class DamageDeathMove implements Listener {
                             if (lh.getDamager() instanceof Player) killer = (Player) lh.getDamager();
                             if (killer != null && killer.getUniqueId().equals(victim.getUniqueId())) killer = null;
                         }
+                    }else if(bedDestroyer != null){
+                        killer = bedDestroyer;
+                        if (killer != null && killer.getUniqueId().equals(victim.getUniqueId())) killer = null;
                     }
                     if (killer == null) {
                         message = victimsTeamBedDestroyed ? Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_FINAL_KILL : Messages.PLAYER_DIE_EXPLOSION_WITHOUT_SOURCE_REGULAR;
@@ -372,6 +377,9 @@ public class DamageDeathMove implements Listener {
                             if (lh.getDamager() instanceof Player) killer = (Player) lh.getDamager();
                             if (killer != null && killer.getUniqueId().equals(victim.getUniqueId())) killer = null;
                         }
+                    }else if(bedDestroyer != null){
+                        killer = bedDestroyer;
+                        if (killer != null && killer.getUniqueId().equals(victim.getUniqueId())) killer = null;
                     }
                     if (killer == null) {
                         message = victimsTeamBedDestroyed ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
@@ -421,6 +429,18 @@ public class DamageDeathMove implements Listener {
                             }
                             cause = victimsTeamBedDestroyed ? PlayerKillEvent.PlayerKillCause.PLAYER_PUSH_FINAL : PlayerKillEvent.PlayerKillCause.PLAYER_PUSH;
                         }
+                    } else if(bedDestroyer != null){
+                        killer = bedDestroyer;
+                        if (killer != null && killer.getUniqueId().equals(victim.getUniqueId())) killer = null;
+
+                        if (killer != null) {
+                            if (killer != victim) {
+                                message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_KNOCKED_BY_FINAL_KILL : Messages.PLAYER_DIE_KNOCKED_BY_REGULAR_KILL;
+                            } else {
+                                message = victimsTeam.isBedDestroyed() ? Messages.PLAYER_DIE_VOID_FALL_FINAL_KILL : Messages.PLAYER_DIE_VOID_FALL_REGULAR_KILL;
+                            }
+                        }
+                        cause = victimsTeam.isBedDestroyed() ? PlayerKillEvent.PlayerKillCause.PLAYER_PUSH_FINAL : PlayerKillEvent.PlayerKillCause.PLAYER_PUSH;
                     }
                 }
             }

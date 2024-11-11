@@ -100,6 +100,19 @@ public interface ITeam {
     IBedHolo getBedHologram(Player player);
 
     /**
+     * Set the bed destoryer for the team
+     *
+     * @param bedDestroyer target player.
+     */
+
+    void setBedDestroyer(Player bedDestroyer);
+
+    /**
+     * Get the bed destroyer
+     */
+    Player getBedDestroyer();
+
+    /**
      * Get list of team upgrades.
      * Upgrade identifier, tier.
      */

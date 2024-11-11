@@ -81,6 +81,7 @@ public class BedWarsTeam implements ITeam {
     @Getter
     private boolean bedDestroyed = false;
     private boolean shopSpawned = false;
+    private Player bedDestroyer = null;
     private Vector killDropsLoc = null;
 
     // team generators
@@ -786,6 +787,7 @@ public class BedWarsTeam implements ITeam {
         enemyBaseEnterTraps.clear();
         membersCache = null;
         dragonEntities = null;
+        bedDestroyer = null;
     }
 
     @Override
@@ -835,5 +837,15 @@ public class BedWarsTeam implements ITeam {
             }
         }
         return false;
+    }
+
+    @Override
+    public void setBedDestroyer(Player bedDestroyer) {
+        this.bedDestroyer = bedDestroyer;
+    }
+
+    @Override
+    public Player getBedDestroyer() {
+        return bedDestroyer;
     }
 }

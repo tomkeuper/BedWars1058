@@ -29,6 +29,7 @@ import com.tomkeuper.bedwars.api.language.Language;
 import com.tomkeuper.bedwars.api.language.Messages;
 import com.tomkeuper.bedwars.api.server.ServerType;
 import com.tomkeuper.bedwars.arena.Arena;
+import com.tomkeuper.bedwars.commands.party.PartyCommand;
 import com.tomkeuper.bedwars.commands.shout.ShoutCommand;
 import com.tomkeuper.bedwars.configuration.Permissions;
 import com.tomkeuper.bedwars.support.papi.SupportPAPI;
@@ -53,6 +54,15 @@ public class ChatFormatting implements Listener {
     public void onChat(AsyncPlayerChatEvent e) {
         if (e == null) return;
         Player p = e.getPlayer();
+
+        if (PartyCommand.chatToggle.getOrDefault(p.getUniqueId(), false) && BedWars.getPartyManager().hasParty(p)) {
+            // Send the message only to party members
+            e.getRecipients().clear();
+            e.getRecipients().addAll(BedWars.getPartyManager().getMembers(p));
+            String format = ChatColor.translateAlternateColorCodes('&', "&e&lPARTY &8&l┃ &b%bw_playername% &7→ ") + ChatColor.GRAY + "%bw_message%";
+            e.setFormat(parsePHolders(format, e.getMessage(), p, null, null));
+            return;
+        }
 
         // in shared mode we don't want messages from outside the arena to be seen in game
         if (BedWars.getServerType() == ServerType.SHARED && Arena.getArenaByPlayer(p) == null) {
