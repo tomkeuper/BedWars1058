@@ -719,7 +719,7 @@ public class BedWars extends JavaPlugin {
             this.getLogger().info("  - Scoreboard: " + (TabAPI.getInstance().getScoreboardManager() == null ? "false" : "true"));
             try {
                 this.getLogger().info("  - UnlimitedNameTag: " + ((TabAPI.getInstance().getNameTagManager() instanceof UnlimitedNameTagManager)  ? "true" : "false"));
-            } catch (Exception e) {
+            } catch (NoClassDefFoundError e) {
                 this.getLogger().info("  - UnlimitedNameTag: not supported!");
             }
             this.getLogger().info("  - BossBar: " + ((TabAPI.getInstance().getBossBarManager() == null)  ? "false" : "true"));
