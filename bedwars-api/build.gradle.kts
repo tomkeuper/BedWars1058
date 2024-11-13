@@ -11,7 +11,7 @@ dependencies {
     }
     compileOnly("com.iridium:IridiumColorAPI:1.0.9")
     compileOnly("org.apache.commons:commons-lang3:3.14.0") // Used by UridiumColorAPI
-    compileOnly("me.neznamy:tab-api:3.2.4")
+    compileOnly("com.github.NEZNAMY:TAB-API:4.1.9")
 }
 
 tasks.javadoc {
@@ -21,8 +21,9 @@ tasks.javadoc {
 repositories{
     mavenCentral()
     mavenLocal()
+    maven("https://oss.sonatype.org/content/repositories/snapshots/") // bungecord-chat (dep of spigot-api (md-5:bungeecord-chat:1.8-SNAPSHOT))
     maven("https://nexus.iridiumdevelopment.net/repository/maven-releases/") // IridiumColorAPI
-    maven("https://repo.kryptonmc.org/releases") // TAB
+    maven("https://jitpack.io") // TAB
     maven("https://repo.codemc.io/repository/nms/") // Spigot
 }
 
