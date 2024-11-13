@@ -686,14 +686,11 @@ public class DamageDeathMove implements Listener {
     @EventHandler
     public void onItemFrameDamage(EntityDamageByEntityEvent e) {
         Entity entity = e.getEntity();
-        Entity damager = e.getDamager();
+        if (entity.getType() != EntityType.ITEM_FRAME) return;
 
-        if (entity.getType() == EntityType.ITEM_FRAME) {
-            IArena a = Arena.getArenaByIdentifier(entity.getWorld().getName());
-            if (a != null) e.setCancelled(true);
-            if (BedWars.getServerType() == ServerType.MULTIARENA) {
-                if (BedWars.getLobbyWorld().equals(entity.getWorld().getName())) e.setCancelled(true);
-            }
+        IArena a = Arena.getArenaByIdentifier(entity.getWorld().getName());
+        if (a != null || (BedWars.getServerType() == ServerType.MULTIARENA && BedWars.getLobbyWorld().equals(entity.getWorld().getName()))) {
+            e.setCancelled(true);
         }
     }
 
