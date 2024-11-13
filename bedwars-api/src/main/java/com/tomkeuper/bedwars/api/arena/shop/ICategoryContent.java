@@ -69,6 +69,13 @@ public interface ICategoryContent {
     boolean isDowngradable();
 
     /**
+     * Check if the content is upgradeable
+     *
+     * @return if the code is upgradable (Has more than 1 tier)
+     */
+    boolean isUpgradable();
+
+    /**
      * Get the identifier of the category content.
      *
      * @return The identifier of the category content.

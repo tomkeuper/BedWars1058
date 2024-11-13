@@ -49,21 +49,22 @@ public class PlayerDrops {
      * @return true if event drops must be cleared.
      */
     public static boolean handlePlayerDrops(IArena arena, Player victim, Player killer, ITeam victimsTeam, ITeam killersTeam, PlayerKillEvent.PlayerKillCause cause, List<ItemStack> inventory) {
-        if (arena.getConfig().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) {
-            return false;
-        }
+        if (arena.getConfig().getBoolean(ConfigPath.ARENA_NORMAL_DEATH_DROPS)) return false;
+
         if (cause == PlayerKillEvent.PlayerKillCause.PLAYER_PUSH || cause == PlayerKillEvent.PlayerKillCause.PLAYER_PUSH_FINAL) {
             // if died by fall damage drop items at location
             dropItems(victim, inventory);
             return true;
         }
+
         if (killer == null) {
-            // Death without a attacker drops items on the floor
+            // Death without an attacker drops items on the floor
             dropItems(victim, inventory);
             return true;
         }
+
         if (cause.isDespawnable()) {
-            // If killed by a ironGolem or silverFish drop on floor
+            // If killed by an ironGolem or silverFish drop on floor
             dropItems(victim, inventory);
             return true;
         }
