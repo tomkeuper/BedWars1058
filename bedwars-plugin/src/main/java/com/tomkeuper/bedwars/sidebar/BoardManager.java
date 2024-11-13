@@ -337,6 +337,7 @@ public class BoardManager implements IScoreboardService {
             // Set scoreboard name and temporary group based on arena status
             if (arenaStatus == null) {
                 if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_USE_LOBBY_SIDEBAR)) scoreboardName = "bw_lobby_" + playerLanguage.getIso();
+                tabPlayer.setTemporaryGroup(null); // Reset group
             } else {
                 String temporaryGroup = null;
                 switch (arenaStatus) {
@@ -450,7 +451,8 @@ public class BoardManager implements IScoreboardService {
 
     @Override
     public void remove(@NotNull Player player) {
-        scoreboardManager.resetScoreboard(Objects.requireNonNull(TabAPI.getInstance().getPlayer(player.getUniqueId())));
+        if (Objects.requireNonNull(TabAPI.getInstance().getPlayer(player.getUniqueId())).isLoaded())
+            scoreboardManager.resetScoreboard(Objects.requireNonNull(TabAPI.getInstance().getPlayer(player.getUniqueId())));
     }
 
     public String getPrefix(TabPlayer tabPlayer) {

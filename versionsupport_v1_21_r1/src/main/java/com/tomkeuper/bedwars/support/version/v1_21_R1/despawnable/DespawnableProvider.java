@@ -85,8 +85,8 @@ public abstract class DespawnableProvider<T> {
 
         var entity = ((EntityInsentient)((CraftEntity)bukkitEntity).getHandle());
 
-        Objects.requireNonNull(entity.eS().a(GenericAttributes.a)).a(attr.health());
-        Objects.requireNonNull(entity.eS().a(GenericAttributes.d)).a(attr.speed());
-        Objects.requireNonNull(entity.eS().a(GenericAttributes.f)).a(attr.damage());
+        Objects.requireNonNull(entity.eS().a(GenericAttributes.s)).a(attr.health());
+        Objects.requireNonNull(entity.eS().a(GenericAttributes.v)).a(attr.speed());
+        Objects.requireNonNull(entity.eS().a(GenericAttributes.c)).a(attr.damage());
     }
 }

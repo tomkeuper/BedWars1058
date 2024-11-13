@@ -22,6 +22,7 @@ package com.tomkeuper.bedwars.commands.party;
 
 import com.tomkeuper.bedwars.BedWars;
 import com.tomkeuper.bedwars.api.language.Messages;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -44,6 +45,7 @@ public class PartyCommand extends BukkitCommand {
 
     //owner, target
     private static HashMap<UUID, UUID> partySessionRequest = new HashMap<>();
+    public static HashMap<UUID, Boolean> chatToggle = new HashMap<>();
 
     @Override
     public boolean execute(CommandSender s, String c, String[] args) {
@@ -125,6 +127,7 @@ public class PartyCommand extends BukkitCommand {
                     return true;
                 }
                 BedWars.getPartyManager().removeFromParty(p);
+                chatToggle.put(p.getUniqueId(), true);
                 break;
             case "disband":
                 if (!BedWars.getPartyManager().hasParty(p)) {
@@ -135,6 +138,10 @@ public class PartyCommand extends BukkitCommand {
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INSUFFICIENT_PERMISSIONS));
                     return true;
                 }
+                for(Player players : BedWars.getPartyManager().getMembers(p)){
+                    chatToggle.put(players.getUniqueId(), true);
+                }
+                chatToggle.put(p.getUniqueId(), true);
                 BedWars.getPartyManager().disband(p);
                 break;
             case "remove":
@@ -155,6 +162,7 @@ public class PartyCommand extends BukkitCommand {
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_REMOVE_DENIED_TARGET_NOT_PARTY_MEMBER).replace("%bw_player%", args[1]));
                     return true;
                 }
+                chatToggle.put(target.getUniqueId(), true);
                 BedWars.getPartyManager().removePlayer(p, target);
                 break;
             case "promote":
@@ -197,6 +205,15 @@ public class PartyCommand extends BukkitCommand {
                 for (Player p1 : BedWars.getPartyManager().getMembers(owner)) {
                     p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_INFO_PLAYER).replace("%bw_player%", p1.getName()));
                 }
+                break;
+            case "chat":
+                if (!BedWars.getPartyManager().hasParty(p)) {
+                    p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_GENERAL_DENIED_NOT_IN_PARTY));
+                    return true;
+                }
+                boolean chatEnabled = chatToggle.getOrDefault(p.getUniqueId(), false);
+                chatToggle.put(p.getUniqueId(), !chatEnabled);
+                p.sendMessage(getMsg(p, Messages.COMMAND_PARTY_CHAT_ENABLED_DISABLED).replace("%bw_party_chat_status%", chatEnabled ? getMsg(p, Messages.MEANING_DISABLED) : getMsg(p, Messages.MEANING_ENABLED)));
                 break;
             default:
                 sendPartyCmds(p);

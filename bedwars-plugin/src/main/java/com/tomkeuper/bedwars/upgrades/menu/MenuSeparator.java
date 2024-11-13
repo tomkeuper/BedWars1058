@@ -21,11 +21,12 @@
 package com.tomkeuper.bedwars.upgrades.menu;
 
 import com.tomkeuper.bedwars.BedWars;
+import com.tomkeuper.bedwars.api.arena.IArena;
 import com.tomkeuper.bedwars.api.arena.team.ITeam;
 import com.tomkeuper.bedwars.api.language.Language;
 import com.tomkeuper.bedwars.api.language.Messages;
 import com.tomkeuper.bedwars.api.upgrades.MenuContent;
-import com.tomkeuper.bedwars.upgrades.UpgradesManager;
+import com.tomkeuper.bedwars.arena.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -42,6 +43,7 @@ public class MenuSeparator implements MenuContent {
     private ItemStack displayItem;
     private String name;
     private List<String> playerCommands = new ArrayList<>(), consoleCommands = new ArrayList<>();
+    private boolean backButton;
 
     /**
      * Create a separator.
@@ -54,6 +56,10 @@ public class MenuSeparator implements MenuContent {
         this.name = name;
         Language.saveIfNotExists(Messages.UPGRADES_SEPARATOR_ITEM_NAME_PATH + name.replace("separator-", ""), "&cName not set");
         Language.saveIfNotExists(Messages.UPGRADES_SEPARATOR_ITEM_LORE_PATH + name.replace("separator-", ""), Collections.singletonList("&cLore not set"));
+
+        if (name.equalsIgnoreCase("separator-back")) {
+            backButton = true;
+        }
 
         if (BedWars.getUpgradeManager().getConfiguration().getYml().getStringList(name + ".on-click.player") != null) {
             playerCommands.addAll(BedWars.getUpgradeManager().getConfiguration().getYml().getStringList(name + ".on-click.player"));
@@ -85,6 +91,10 @@ public class MenuSeparator implements MenuContent {
         for (String cmd : consoleCommands) {
             if (cmd.trim().isEmpty()) continue;
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("{playername}", player.getName()).replace("{player}", player.getDisplayName()).replace("{team}", team == null ? "null" : team.getDisplayName(Language.getPlayerLanguage(player))));
+        }
+        if (backButton) {
+            IArena arena = Arena.getArenaByPlayer(player);
+            BedWars.getUpgradeManager().getMenuForArena(arena).open(player);
         }
         return true;
     }

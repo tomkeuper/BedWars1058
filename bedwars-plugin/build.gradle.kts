@@ -12,7 +12,6 @@ repositories {
     mavenCentral()
     mavenLocal()
     // Important Repos
-    maven("https://repo.kryptonmc.org/releases/") // TAB
     maven("https://papermc.io/repo/repository/maven-public/") // PaperLib
     maven("https://repo.codemc.io/repository/nms/") // Spigot
     maven("https://repo.codemc.io/repository/maven-public/") // VipFeatures
@@ -24,7 +23,7 @@ repositories {
     maven("https://repo.tomkeuper.com/repository/releases/") // slimjar
     maven("https://repo.alessiodp.com/releases/") // slimjar - dependencies
     maven("https://repo.rapture.pw/repository/maven-releases/") // Flow-NBT
-    maven("https://jitpack.io") // Jitpack (RTag)
+    maven("https://jitpack.io") // Jitpack (RTag) & TAB
 }
 
 dependencies {
@@ -73,8 +72,8 @@ dependencies {
         exclude("org.bukkit", "bukkit")
     }
     compileOnly("org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT")
-    compileOnly("me.clip:placeholderapi:2.11.2")
-    compileOnly("me.neznamy:tab-api:4.0.2")
+    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("com.github.NEZNAMY:TAB-API:4.1.9")
     compileOnly("de.dytanic.cloudnet:cloudnet-wrapper-jvm:3.4.5-RELEASE")
     slim("redis.clients:jedis:5.0.2")
     slim("com.flowpowered:flow-nbt:2.0.2")

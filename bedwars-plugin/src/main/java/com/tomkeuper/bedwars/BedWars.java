@@ -231,6 +231,7 @@ public class BedWars extends JavaPlugin {
                 nmsVersion = "v1_20_R4";
                 break;
             case "1.21":
+            case "1.21.1":
                 nmsVersion = "v1_21_R1";
                 break;
             default:
@@ -717,7 +718,11 @@ public class BedWars extends JavaPlugin {
             this.getLogger().info("TAB Version: " + Bukkit.getPluginManager().getPlugin("TAB").getDescription().getVersion());
             this.getLogger().info("TAB Features: ");
             this.getLogger().info("  - Scoreboard: " + (TabAPI.getInstance().getScoreboardManager() == null ? "false" : "true"));
-            this.getLogger().info("  - UnlimitedNameTag: " + ((TabAPI.getInstance().getNameTagManager() instanceof UnlimitedNameTagManager)  ? "true" : "false"));
+            try {
+                this.getLogger().info("  - UnlimitedNameTag: " + ((TabAPI.getInstance().getNameTagManager() instanceof UnlimitedNameTagManager)  ? "true" : "false"));
+            } catch (NoClassDefFoundError e) {
+                this.getLogger().info("  - UnlimitedNameTag: not supported!");
+            }
             this.getLogger().info("  - BossBar: " + ((TabAPI.getInstance().getBossBarManager() == null)  ? "false" : "true"));
             this.getLogger().info("  - TablistNameFormatting: " + ((TabAPI.getInstance().getTabListFormatManager() == null)  ? "false" : "true"));
             this.getLogger().info("  - HeaderFooterFormatting: " + ((TabAPI.getInstance().getHeaderFooterManager() == null)  ? "false" : "true"));

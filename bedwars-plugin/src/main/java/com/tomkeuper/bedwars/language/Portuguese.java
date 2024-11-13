@@ -123,6 +123,7 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.COMMAND_PARTY_INFO_OWNER, "\n%bw_lang_prefix%&eO dono do grupo é: &7%bw_party_owner%");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYERS,"%bw_lang_prefix%&eMembros do grupo são:");
         yml.addDefault(Messages.COMMAND_PARTY_INFO_PLAYER, "&7%bw_player%");
+        yml.addDefault(Messages.COMMAND_PARTY_CHAT_ENABLED_DISABLED, "&e&lPARTY &8&l┃ &fParty chat is now %bw_party_chat_status% &f!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NOT_IN_GAME, "§c▪ §7Você não está jogando!");
         yml.addDefault(Messages.COMMAND_FORCESTART_SUCCESS, "§c▪ §7Contagem regressiva encurtada!");
         yml.addDefault(Messages.COMMAND_FORCESTART_NO_PERM, "%bw_lang_prefix%&7Você não pode inicializar uma partida.\n§7Por favor, considere doar para obter vantagens VIP.");
@@ -231,6 +232,8 @@ public class Portuguese extends Language {
         yml.addDefault(Messages.MEANING_DIAMOND_PLURAL, "Diamantes");
         yml.addDefault(Messages.MEANING_VAULT_SINGULAR, "$");
         yml.addDefault(Messages.MEANING_VAULT_PLURAL, "$");
+        yml.addDefault(Messages.MEANING_ENABLED, "&aEnabled");
+        yml.addDefault(Messages.MEANING_DISABLED, "&cDisabled");
         yml.addDefault(Messages.INTERACT_CANNOT_PLACE_BLOCK, "%bw_lang_prefix%&cVocê não pode colocar blocos aqui!");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_BLOCK, "%bw_lang_prefix%&cVocê só pode quebrar blocos colocados por um jogador!");
         yml.addDefault(Messages.INTERACT_CANNOT_BREAK_OWN_BED, "&cVocê não pode destruir sua própria cama!");

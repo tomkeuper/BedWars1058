@@ -35,6 +35,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.List;
 
@@ -64,9 +65,9 @@ public class Save extends SubCommand {
         }
 
         if (Bukkit.getWorld(BedWars.getLobbyWorld()) != null) {
-            PaperSupport.teleport(p, Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation());
+            PaperSupport.teleportC(p, Bukkit.getWorld(BedWars.getLobbyWorld()).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
         } else {
-            PaperSupport.teleport(p, Bukkit.getWorlds().get(0).getSpawnLocation());
+            PaperSupport.teleportC(p, Bukkit.getWorlds().get(0).getSpawnLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
         }
         ss.done();
         p.sendMessage(ss.getPrefix() + "Arena changes saved!");

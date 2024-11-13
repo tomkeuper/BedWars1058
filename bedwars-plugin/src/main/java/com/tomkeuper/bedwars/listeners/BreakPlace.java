@@ -323,6 +323,7 @@ public class BreakPlace implements Listener {
                                         } else {
                                             e.setCancelled(false);
                                             t.setBedDestroyed(true);
+                                            t.setBedDestroyer(p);
                                             a.addPlayerBedDestroyed(p);
                                             PlayerBedBreakEvent breakEvent;
                                             Bukkit.getPluginManager().callEvent(breakEvent = new PlayerBedBreakEvent(e.getPlayer(), a.getTeam(p), t, a,
@@ -383,16 +384,6 @@ public class BreakPlace implements Listener {
                 if (!a.isBlockPlaced(e.getBlock())) {
                     p.sendMessage(getMsg(p, Messages.INTERACT_CANNOT_BREAK_BLOCK));
                     e.setCancelled(true);
-                }
-            }
-
-            if (!e.isCancelled() && p.getGameMode() != GameMode.CREATIVE){
-                Block drop = e.getBlock();
-                Collection<ItemStack> drops = drop.getDrops(e.getPlayer().getItemInHand());
-                drop.setType(Material.AIR);
-                for (ItemStack item : drops){
-                    ItemStack newItem = nms.addCustomData(item, "");
-                    e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation().add(0.5,0.5,0.5), newItem);
                 }
             }
         }
@@ -529,8 +520,10 @@ public class BreakPlace implements Listener {
         IArena a = Arena.getArenaByIdentifier(e.getLocation().getWorld().getName());
         if (a != null) {
             if (a.getStatus() == GameState.playing) {
+                if (e.getEntity().getType() == EntityType.ENDER_DRAGON && a.isAllowEnderDragonDestroy()) {
+                    return;
+                }
                 e.blockList().removeIf((b) -> (a.isProtected(b.getLocation()) || a.isTeamBed(b.getLocation()) || (!a.isBlockPlaced(b) && !a.isAllowMapBreak())));
-                return;
             }
         }
     }

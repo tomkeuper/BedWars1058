@@ -69,18 +69,24 @@ public class BedWarsTeam implements ITeam {
 
     @Getter
     private List<Player> members = new ArrayList<>();
+
     @Getter
     private TeamColor color;
+
     @Getter
     private Location spawn, bed, shop, teamUpgrades;
-    //private IGenerator ironGenerator = null, goldGenerator = null, emeraldGenerator = null;
+
+    // private IGenerator ironGenerator = null, goldGenerator = null, emeraldGenerator = null;
     @Getter
     private String name;
+
     @Getter
     private Arena arena;
+
     @Getter
     private boolean bedDestroyed = false;
     private boolean shopSpawned = false;
+    private Player bedDestroyer = null;
     private Vector killDropsLoc = null;
 
     // team generators
@@ -88,33 +94,44 @@ public class BedWarsTeam implements ITeam {
 
     // team upgrade name, tier
     private final ConcurrentHashMap<String, Integer> teamUpgradeList = new ConcurrentHashMap<>();
+
     // Potion effects for teammates from the upgrades
     @Getter
     private List<PotionEffect> teamEffects = new ArrayList<>();
+
     // Potion effects for teammates on base only
     private List<PotionEffect> base = new ArrayList<>();
+
     // Enchantments for bows
     @Getter
     private List<TeamEnchant> bowsEnchantments = new ArrayList<>();
+
     // Enchantments for swords
     @Getter
     private List<TeamEnchant> swordsEnchantments = new ArrayList<>();
+
     // Enchantments for armors
     @Getter
     private List<TeamEnchant> armorsEnchantments = new ArrayList<>();
+
     // Used for show/ hide bed hologram
     @Getter
     private final HashMap<UUID, BedHolo> beds = new HashMap<>();
+
     // Queued traps
     private final LinkedList<EnemyBaseEnterTrap> enemyBaseEnterTraps = new LinkedList<>();
+
     // Amount of dragons for Sudden Death phase
     @Getter
     private int dragonAmount = 1;
+
     // Player cache, used for losers stats and rejoin
     private List<EnderDragon> dragonEntities = new ArrayList<>();
+
     // Player cache, used for losers stats and rejoin
     @Getter
     private List<Player> membersCache = new ArrayList<>();
+
     // Invulnerability at re-spawn
     // Fall invulnerability when teammates respawn
     public static HashMap<UUID, Long> reSpawnInvulnerability = new HashMap<>();
@@ -786,6 +803,7 @@ public class BedWarsTeam implements ITeam {
         enemyBaseEnterTraps.clear();
         membersCache = null;
         dragonEntities = null;
+        bedDestroyer = null;
     }
 
     @Override
@@ -835,5 +853,15 @@ public class BedWarsTeam implements ITeam {
             }
         }
         return false;
+    }
+
+    @Override
+    public void setBedDestroyer(Player bedDestroyer) {
+        this.bedDestroyer = bedDestroyer;
+    }
+
+    @Override
+    public Player getBedDestroyer() {
+        return bedDestroyer;
     }
 }

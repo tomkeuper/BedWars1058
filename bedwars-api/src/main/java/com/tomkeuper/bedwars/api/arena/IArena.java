@@ -735,4 +735,26 @@ public interface IArena {
      * @return The team that owns the bed at the given location, or null if there is no bed or if the location is not in this arena's world.
      */
     @Nullable ITeam getBedsTeam(Location location);
+
+    /**
+     * Enable or disable the ender dragon from destroying blocks even when protected.
+     *
+     * @return true if the ender dragon can destroy blocks, false otherwise.
+     */
+    boolean isAllowEnderDragonDestroy();
+
+    /**
+     * Enable or disable the ender dragon from destroying blocks even when protected.
+     *
+     * @param allowDestory true if the ender dragon can destroy blocks, false otherwise.
+     */
+    @SuppressWarnings("unused")
+    void setAllowEnderDragonDestroy(boolean allowDestory);
+
+     /**
+     * Get the time in seconds when the magic milk effect will expire.
+     *
+     * @return The time when the magic milk effect will expire.
+     */
+    int getMagicMilkTime();
 }

@@ -30,6 +30,7 @@ import com.tomkeuper.bedwars.arena.Arena;
 import com.tomkeuper.bedwars.arena.upgrades.BaseListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,6 +39,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.inventory.ItemStack;
 
 import static com.tomkeuper.bedwars.BedWars.*;
 import static com.tomkeuper.bedwars.api.language.Language.getMsg;
@@ -121,8 +123,10 @@ public class HungerWeatherSpawn implements Listener {
 
         switch (e.getItem().getType()) {
             /* remove empty bottle */
-            case GLASS_BOTTLE:
-                nms.minusAmount(p, e.getItem(), 1);
+            case POTION:
+                if (nms.isInvisibilityPotion(e.getItem())) return; // handled in InvisibilityPotionListener
+                Bukkit.getScheduler().runTaskAsynchronously(plugin, () ->
+                        nms.minusAmount(e.getPlayer(), new ItemStack(Material.GLASS_BOTTLE), 1));
                 break;
 
             case MILK_BUCKET:
@@ -133,7 +137,7 @@ public class HungerWeatherSpawn implements Listener {
                     Arena.magicMilk.remove(p.getUniqueId());
                     p.sendMessage(getMsg(p, Messages.INTERACT_MAGIC_MILK_REMOVED));
                     debug("PlayerItemConsumeEvent player " + p + " was removed from magicMilk");
-                }, 20 * 30L).getTaskId();
+                }, 20L * Arena.getArenaByPlayer(p).getMagicMilkTime()).getTaskId();
 
                 Arena.magicMilk.put(p.getUniqueId(), task);
 

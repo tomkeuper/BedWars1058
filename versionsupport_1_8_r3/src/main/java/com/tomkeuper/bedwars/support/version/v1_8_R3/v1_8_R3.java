@@ -37,6 +37,7 @@ import com.tomkeuper.bedwars.support.version.common.VersionCommon;
 import com.tomkeuper.bedwars.support.version.v1_8_R3.hologram.HoloLine;
 import com.tomkeuper.bedwars.support.version.v1_8_R3.hologram.Hologram;
 import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -49,6 +50,7 @@ import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.InventoryEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -215,12 +217,33 @@ public class v1_8_R3 extends VersionSupport {
 
     @Override
     public void minusAmount(Player p, ItemStack i, int amount) {
-        if (i.getAmount() - amount <= 0) {
-            p.getInventory().removeItem(i);
+        org.bukkit.inventory.PlayerInventory inventory = p.getInventory();
+        int selectedSlot = inventory.getHeldItemSlot();
+        ItemStack selectedItem = inventory.getItem(selectedSlot);
+
+        // Check if the selected item matches the item to be reduced
+        if (selectedItem != null && selectedItem.isSimilar(i)) {
+            if (selectedItem.getAmount() - amount <= 0) {
+                inventory.setItem(selectedSlot, null);
+            } else {
+                selectedItem.setAmount(selectedItem.getAmount() - amount);
+            }
+            p.updateInventory();
             return;
         }
-        i.setAmount(i.getAmount() - amount);
-        p.updateInventory();
+
+        // If not found in the selected slot, proceed with the rest of the inventory
+        for (ItemStack item : inventory.getContents()) {
+            if (item != null && item.isSimilar(i)) {
+                if (item.getAmount() - amount <= 0) {
+                    inventory.removeItem(item);
+                } else {
+                    item.setAmount(item.getAmount() - amount);
+                }
+                p.updateInventory();
+                return;
+            }
+        }
     }
 
     public static class VillagerShop extends EntityVillager {
@@ -426,7 +449,7 @@ public class v1_8_R3 extends VersionSupport {
             tag = new NBTTagCompound();
         }
 
-        tag.setString("BedWars2023", data);
+        tag.setString(VersionSupport.PLUGIN_TAG_GENERIC_KEY, data);
         itemStack.setTag(tag);
         return CraftItemStack.asBukkitCopy(itemStack);
     }
@@ -457,7 +480,7 @@ public class v1_8_R3 extends VersionSupport {
         if (itemStack == null) return false;
         NBTTagCompound tag = itemStack.getTag();
         if (tag == null) return false;
-        return tag.hasKey("BedWars2023");
+        return tag.hasKey(VersionSupport.PLUGIN_TAG_GENERIC_KEY);
     }
 
     @Override
@@ -465,7 +488,7 @@ public class v1_8_R3 extends VersionSupport {
         net.minecraft.server.v1_8_R3.ItemStack itemStack = CraftItemStack.asNMSCopy(i);
         NBTTagCompound tag = itemStack.getTag();
         if (tag == null) return "";
-        return tag.getString("BedWars2023");
+        return tag.getString(VersionSupport.PLUGIN_TAG_GENERIC_KEY);
     }
 
     @Override
@@ -779,7 +802,7 @@ public class v1_8_R3 extends VersionSupport {
         b.getRelative(x, y, z).setType(Material.WOOL);
         setBlockTeamColor(b.getRelative(x, y, z), color);
         a.addPlacedBlock(b.getRelative(x, y, z));
-        return b;
+        return b.getRelative(x, y, z);
     }
 
     @Override
@@ -787,7 +810,7 @@ public class v1_8_R3 extends VersionSupport {
         b.getRelative(x, y, z).setType(Material.LADDER);
         b.getRelative(x, y, z).setData((byte)ladderdata);
         a.addPlacedBlock(b.getRelative(x, y, z));
-        return b;
+        return b.getRelative(x, y, z);
     }
 
 

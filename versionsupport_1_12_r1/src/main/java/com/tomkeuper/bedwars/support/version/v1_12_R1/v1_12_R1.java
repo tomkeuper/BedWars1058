@@ -383,7 +383,7 @@ public class v1_12_R1 extends VersionSupport {
             tag = new NBTTagCompound();
         }
 
-        tag.setString("BedWars2023", data);
+        tag.setString(VersionSupport.PLUGIN_TAG_GENERIC_KEY, data);
         itemStack.setTag(tag);
         return CraftItemStack.asBukkitCopy(itemStack);
     }
@@ -406,7 +406,7 @@ public class v1_12_R1 extends VersionSupport {
         ItemStack itemStack = CraftItemStack.asNMSCopy(i);
         NBTTagCompound tag = itemStack.getTag();
         if (tag == null) return false;
-        return tag.hasKey("BedWars2023");
+        return tag.hasKey(VersionSupport.PLUGIN_TAG_GENERIC_KEY);
     }
 
     @Override
@@ -414,7 +414,7 @@ public class v1_12_R1 extends VersionSupport {
         ItemStack itemStack = CraftItemStack.asNMSCopy(i);
         NBTTagCompound tag = itemStack.getTag();
         if (tag == null) return "";
-        return tag.getString("BedWars2023");
+        return tag.getString(VersionSupport.PLUGIN_TAG_GENERIC_KEY);
     }
 
     @Override
@@ -735,7 +735,7 @@ public class v1_12_R1 extends VersionSupport {
         b.getRelative(x, y, z).setType(Material.WOOL);
         setBlockTeamColor(b.getRelative(x, y, z), color);
         a.addPlacedBlock(b.getRelative(x, y, z));
-        return b;
+        return b.getRelative(x, y, z);
     }
 
     @Override
@@ -743,7 +743,7 @@ public class v1_12_R1 extends VersionSupport {
         b.getRelative(x, y, z).setType(Material.LADDER);
         b.getRelative(x, y, z).setData((byte)ladderdata);
         a.addPlacedBlock(b.getRelative(x, y, z));
-        return b;
+        return b.getRelative(x, y, z);
     }
 
     @Override

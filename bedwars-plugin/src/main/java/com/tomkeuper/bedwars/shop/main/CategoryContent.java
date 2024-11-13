@@ -53,16 +53,17 @@ import static com.tomkeuper.bedwars.api.language.Language.getMsg;
 @SuppressWarnings("WeakerAccess")
 public class CategoryContent implements ICategoryContent {
 
+    private final List<IContentTier> contentTiers = new ArrayList<>();
+    private final IShopCategory father;
     private int slot;
     private boolean loaded = false;
-    private List<IContentTier> contentTiers = new ArrayList<>();
-    private String contentName;
+    private final String contentName;
     private String itemNamePath, itemLorePath;
     private String identifier;
     private String categoryIdentifier;
     private boolean permanent = false, downgradable = false, unbreakable = false;
     private byte weight = 0;
-    private IShopCategory father;
+
 
     /**
      * Load a new category
@@ -136,12 +137,10 @@ public class CategoryContent implements ICategoryContent {
         categoryIdentifier = path;
 
         loaded = true;
-
     }
 
     @Override
     public boolean execute(Player player, IShopCache shopCache, int slot) {
-
         IContentTier ct;
 
         //check weight
@@ -163,17 +162,14 @@ public class CategoryContent implements ICategoryContent {
                 Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
                 return false;
             }
-            //current tier
+            // Current tier
             ct = contentTiers.get(shopCache.getContentTier(getIdentifier()) - 1);
         } else {
-            if (!shopCache.hasCachedItem(this)) {
-                ct = contentTiers.get(0);
-            } else {
-                ct = contentTiers.get(shopCache.getContentTier(getIdentifier()));
-            }
+            if (!shopCache.hasCachedItem(this)) ct = contentTiers.get(0);
+            else ct = contentTiers.get(shopCache.getContentTier(getIdentifier()));
         }
 
-        //check money
+        // Check money
         int money = calculateMoney(player, ct.getCurrency());
         if (money < ct.getPrice()) {
             player.sendMessage(getMsg(player, Messages.SHOP_INSUFFICIENT_MONEY).replace("%bw_currency%", getMsg(player, getCurrencyMsgPath(ct))).
@@ -182,43 +178,38 @@ public class CategoryContent implements ICategoryContent {
             return false;
         }
 
-        ShopBuyEvent event;
-        //call shop buy event
-        Bukkit.getPluginManager().callEvent(event = new ShopBuyEvent(player, Arena.getArenaByPlayer(player), this, shopCache));
+        ShopBuyEvent event = new ShopBuyEvent(player, Arena.getArenaByPlayer(player), this, shopCache);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) return false;
 
-        if (event.isCancelled()){
-            return false;
-        }
 
-        //check inventory has space
+        // Check inventory has space
         if (player.getInventory().firstEmpty() == -1){
             Sounds.playSound(ConfigPath.SOUNDS_INSUFF_MONEY, player);
             player.sendMessage(getMsg(player, Messages.UPGRADES_LORE_REPLACEMENT_INSUFFICIENT_SPACE));
             return false;
         }
 
-        //take money
+        // Take money
         takeMoney(player, ct.getCurrency(), ct.getPrice());
 
-        //upgrade if possible
+        // Upgrade if possible
         shopCache.upgradeCachedItem(this, slot);
 
-
-        //give items
+        // Give items
         giveItems(player, event.getShopCache(), Arena.getArenaByPlayer(player));
 
-        //play sound
+        // Play sound
         Sounds.playSound(ConfigPath.SOUNDS_BOUGHT, player);
 
-        //send purchase msg
+        // Send purchase msg
         if (itemNamePath == null || Language.getPlayerLanguage(player).getYml().get(itemNamePath) == null) {
             ItemStack displayItem = ct.getItemStack();
             if (displayItem.getItemMeta() != null && displayItem.getItemMeta().hasDisplayName()) {
                 player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("%bw_item%", displayItem.getItemMeta().getDisplayName()));
             }
         } else {
-            ItemStack displayItem = ct.getItemStack();
-            if (BedWars.nms.isTool(displayItem)) {
+            if (isUpgradable()) {
                 int tierI = ct.getValue();
                 String tier = getRomanNumber(tierI);
                 player.sendMessage(getMsg(player, Messages.SHOP_NEW_PURCHASE).replace("%bw_item%", ChatColor.stripColor(getMsg(player, itemNamePath))).replace("%bw_color%", "").replace("%bw_tier%", tier));
@@ -260,14 +251,10 @@ public class CategoryContent implements ICategoryContent {
     @Override
     public ItemStack getItemStack(Player player, IShopCache shopCache) {
         IContentTier ct;
-        if (shopCache.getContentTier(identifier) == contentTiers.size()) {
-            ct = contentTiers.get(contentTiers.size() - 1);
-        } else {
-            if (shopCache.hasCachedItem(this)) {
-                ct = contentTiers.get(shopCache.getContentTier(identifier));
-            } else {
-                ct = contentTiers.get(shopCache.getContentTier(identifier) - 1);
-            }
+        if (shopCache.getContentTier(identifier) == contentTiers.size()) ct = contentTiers.get(contentTiers.size() - 1);
+        else {
+            if (shopCache.hasCachedItem(this)) ct = contentTiers.get(shopCache.getContentTier(identifier));
+            else ct = contentTiers.get(shopCache.getContentTier(identifier) - 1);
         }
 
         ItemStack i = ct.getItemStack();
@@ -288,32 +275,25 @@ public class CategoryContent implements ICategoryContent {
             String buyStatus;
 
             if (isPermanent() && shopCache.hasCachedItem(this) && shopCache.getCachedItem(this).getTier() == getContentTiers().size()) {
-                if (!(BedWars.nms.isArmor(i))){
-                    buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);  //ARMOR
-                }else {
-                    buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_ARMOR);
-                }
-            } else if (!canAfford) {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("%bw_currency%", translatedCurrency);
-            } else {
-                buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
-            }
-
+                if (!(BedWars.nms.isArmor(i))) buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_MAXED);  //ARMOR
+                else buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_ARMOR);
+            } else if (!canAfford) buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CANT_AFFORD).replace("%bw_currency%", translatedCurrency);
+            else buyStatus = getMsg(player, Messages.SHOP_LORE_STATUS_CAN_BUY);
 
             im.setDisplayName(getMsg(player, itemNamePath).replace("%bw_color%", color).replace("%bw_tier%", tier));
 
             List<String> lore = new ArrayList<>();
+
             for (String s : Language.getList(player, itemLorePath)) {
                 if (s.contains("%bw_quick_buy%")) {
-                    if (hasQuick) {
-                        if (ShopIndex.getIndexViewers().contains(player.getUniqueId())) {
-                            s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
-                        } else {
-                            continue;
-                        }
-                    } else {
+                    if (!hasQuick) {
                         s = getMsg(player, Messages.SHOP_LORE_QUICK_ADD);
+                        continue;
                     }
+
+                    if (ShopIndex.getIndexViewers().contains(player.getUniqueId())) {
+                        s = getMsg(player, Messages.SHOP_LORE_QUICK_REMOVE);
+                    } else continue;
                 }
                 s = s.replace("%bw_tier%", tier).replace("%bw_color%", color).replace("%bw_cost%", cColor + String.valueOf(ct.getPrice()))
                         .replace("%bw_currency%", cColor + translatedCurrency).replace("%bw_buy_status%", buyStatus);
@@ -327,9 +307,7 @@ public class CategoryContent implements ICategoryContent {
     }
 
     public boolean hasQuick(IPlayerQuickBuyCache c) {
-        for (IQuickBuyElement q : c.getElements()) {
-            if (q.getCategoryContent() == this) return true;
-        }
+        for (IQuickBuyElement q : c.getElements()) if (q.getCategoryContent() == this) return true;
         return false;
     }
 
@@ -337,9 +315,7 @@ public class CategoryContent implements ICategoryContent {
      * Get player's money amount
      */
     public static int calculateMoney(Player player, Material currency) {
-        if (currency == Material.AIR) {
-            return (int) BedWars.getEconomy().getMoney(player);
-        }
+        if (currency == Material.AIR) return (int) BedWars.getEconomy().getMoney(player);
 
         int amount = 0;
         for (ItemStack is : player.getInventory().getContents()) {
@@ -376,13 +352,9 @@ public class CategoryContent implements ICategoryContent {
 
     public static ChatColor getCurrencyColor(Material currency) {
         ChatColor c = ChatColor.DARK_GREEN;
-        if (currency.toString().toLowerCase().contains("diamond")) {
-            c = ChatColor.AQUA;
-        } else if (currency.toString().toLowerCase().contains("gold")) {
-            c = ChatColor.GOLD;
-        } else if (currency.toString().toLowerCase().contains("iron")) {
-            c = ChatColor.WHITE;
-        }
+        if (currency.toString().toLowerCase().contains("diamond")) c = ChatColor.AQUA;
+        else if (currency.toString().toLowerCase().contains("gold")) c = ChatColor.GOLD;
+        else if (currency.toString().toLowerCase().contains("iron")) c = ChatColor.WHITE;
         return c;
     }
 
@@ -498,6 +470,10 @@ public class CategoryContent implements ICategoryContent {
 
     public boolean isDowngradable() {
         return downgradable;
+    }
+
+    public boolean isUpgradable() {
+        return getContentTiers().size() > 1;
     }
 
     public String getIdentifier() {

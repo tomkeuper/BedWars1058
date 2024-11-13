@@ -121,7 +121,7 @@ public class Arena implements IArena {
     private ArenaConfig cm;
     private int minPlayers = 2, maxPlayers = 10, maxInTeam = 1, islandRadius = 10;
     public int upgradeDiamondsCount = 0, upgradeEmeraldsCount = 0;
-    public boolean allowSpectate = true, allowMapBreak = false;
+    public boolean allowSpectate = true, allowMapBreak = false, enderDragonDestory = false;
     private World world;
     private String group = "Default", arenaName, worldName;
     private List<ITeam> teams = new ArrayList<>();
@@ -131,7 +131,7 @@ public class Arena implements IArena {
     private List<Region> regionsList = new ArrayList<>();
     private List<ServerPlaceholder> serverPlaceholders = new ArrayList<>();
     private List<BossBar> dragonBossbars = new ArrayList<>();
-    private int renderDistance;
+    private int renderDistance, magicMilkTime = 30;
 
     private final List<Player> leaving = new ArrayList<>();
 
@@ -237,7 +237,9 @@ public class Arena implements IArena {
         maxPlayers = yml.getConfigurationSection("Team").getKeys(false).size() * maxInTeam;
         minPlayers = yml.getInt("minPlayers");
         allowSpectate = yml.getBoolean("allowSpectate");
-        allowMapBreak = yml.getBoolean("allow-map-break");
+        enderDragonDestory = yml.getBoolean(ConfigPath.ARENA_ALLOW_DRAGON_DESTROY_WHEN_PROTECTED);
+        allowMapBreak = yml.getBoolean(ConfigPath.ARENA_ALLOW_MAP_BREAK);
+        magicMilkTime = yml.getInt(ConfigPath.ARENA_MAGIC_MILK_TIME);
         islandRadius = yml.getInt(ConfigPath.ARENA_ISLAND_RADIUS);
         if (config.getYml().get("arenaGroups") != null) {
             if (config.getYml().getStringList("arenaGroups").contains(yml.getString("group"))) {
@@ -530,16 +532,23 @@ public class Arena implements IArena {
 
             /* check if you can start the arena */
             if (status == GameState.waiting) {
-                int teams = 0, teammates = 0;
+                int teams = 0, teammates = 0, partyMembers = 0;
+
                 for (Player on : getPlayers()) {
                     if (getPartyManager().isOwner(on)) {
                         teams++;
                     }
                     if (getPartyManager().hasParty(on)) {
                         teammates++;
+                        partyMembers += getPartyManager().getMembers(on).size();
                     }
                 }
-                if (minPlayers <= players.size() && teams > 0 && players.size() != teammates / teams) {
+
+                // Check if the party fills the arena
+                if (partyMembers >= maxPlayers) {
+                    Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.starting), 10L);
+                    isStatusChange = true;
+                } else if (minPlayers <= players.size() && teams > 0 && players.size() != teammates / teams) {
                     Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.starting), 10L);
                     isStatusChange = true;
                 } else if (players.size() >= minPlayers && teams == 0) {
@@ -909,6 +918,8 @@ public class Arena implements IArena {
                             .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
                             .replace("%bw_playername%", p.getName())
                             .replace("%bw_player%", p.getDisplayName()
+                            .replace("%bw_on%", String.valueOf(getPlayers().size()))
+                            .replace("%bw_max%", String.valueOf(getMaxPlayers()))
                             )
             );
         }
@@ -918,7 +929,11 @@ public class Arena implements IArena {
                     .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
                     .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
                     .replace("%bw_playername%", p.getName())
-                    .replace("%bw_player%", p.getDisplayName()));
+                    .replace("%bw_player%", p.getDisplayName()
+                    .replace("%bw_on%", String.valueOf(getPlayers().size()))
+                    .replace("%bw_max%", String.valueOf(getMaxPlayers()))
+                    ));
+
         }
 
         if (getServerType() == ServerType.SHARED) {
@@ -2518,6 +2533,21 @@ public class Arena implements IArena {
     }
 
     @Override
+    public boolean isAllowEnderDragonDestroy() {
+        return enderDragonDestory;
+    }
+
+    @Override
+    public void setAllowEnderDragonDestroy(boolean allowDestory) {
+        this.enderDragonDestory = allowDestory;
+    }
+  
+    @Override
+    public int getMagicMilkTime() {
+        return magicMilkTime;
+    }
+
+    @Override
     public boolean isMapBreakable() {
         return allowMapBreak;
     }
@@ -2733,4 +2763,6 @@ public class Arena implements IArena {
             dragonBossbars.add(bb);
         }
     }
+
+
 }

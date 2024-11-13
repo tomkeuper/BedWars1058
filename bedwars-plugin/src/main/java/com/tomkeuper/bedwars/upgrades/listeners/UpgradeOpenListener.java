@@ -29,12 +29,12 @@ import com.tomkeuper.bedwars.upgrades.UpgradesManager;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class UpgradeOpenListener implements Listener {
 
     @EventHandler
-    public void onUpgradesOpen(PlayerInteractAtEntityEvent e){
+    public void onUpgradesOpen(PlayerInteractEntityEvent e){
         IArena a = Arena.getArenaByPlayer(e.getPlayer());
         if (a == null) return;
         if(!a.getStatus().equals(GameState.playing)) return;

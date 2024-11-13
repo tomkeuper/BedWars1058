@@ -31,6 +31,7 @@ import com.tomkeuper.bedwars.support.paper.PaperSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +77,7 @@ public class CmdTpStaff extends SubCommand {
                 if (a2.isPlayer(p2)) a2.removePlayer(p2, false);
                 if (a2.isSpectator(p2)) {
                     if (a2.getArenaName().equals(a.getArenaName())) {
-                        PaperSupport.teleport(p2, p.getLocation());
+                        PaperSupport.teleportC(p2, p.getLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
                         return true;
                     } else a2.removeSpectator(p2, false);
                 }

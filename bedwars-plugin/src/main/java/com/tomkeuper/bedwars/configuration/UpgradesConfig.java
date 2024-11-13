@@ -145,7 +145,7 @@ public class UpgradesConfig extends ConfigManager {
             yml.addDefault("base-trap-4.receive", Collections.singletonList("player-effect: SLOW_DIGGING,1,15,enemy"));
 
             //noinspection ArraysAsListWithZeroOrOneArgument
-            yml.addDefault("separator-back.on-click.player", Arrays.asList("bw upgradesmenu"));
+            yml.addDefault("separator-back.on-click.player", Arrays.asList(""));
             //noinspection ArraysAsListWithZeroOrOneArgument
             yml.addDefault("separator-back.on-click.console", Arrays.asList(""));
             addDefaultDisplayItem("separator-back", "ARROW", 0, 1, false);

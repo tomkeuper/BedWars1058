@@ -138,12 +138,10 @@ public class InvisibilityPotionListener implements Listener {
         if (nms.isInvisibilityPotion(e.getItem())) {
             // remove potion bottle
             nms.minusAmount(e.getPlayer(), e.getItem(), 1);
-            BedWars.debug("Potions: " + e.getPlayer().getActivePotionEffects().size());
 
             PotionMeta meta = (PotionMeta) e.getItem().getItemMeta();
             for (PotionEffect effect : meta.getCustomEffects()) {
                 if (effect.getType().equals(PotionEffectType.INVISIBILITY)) {
-                    BedWars.debug("Adding invis with duration: " + effect.getDuration());
                     PotionEffect pe = new PotionEffect(PotionEffectType.INVISIBILITY, effect.getDuration(), effect.getAmplifier());
                     e.getPlayer().addPotionEffect(pe, true);
                     handleInvisibility(e.getPlayer(), a, pe);
@@ -155,7 +153,6 @@ public class InvisibilityPotionListener implements Listener {
 
     @EventHandler
     public void onSplash(PotionSplashEvent event) {
-        BedWars.debug("Potion splash event");
         if (event.isCancelled()) return;
         for (LivingEntity entity : event.getAffectedEntities()) {
             if (entity instanceof Player) {
@@ -167,10 +164,8 @@ public class InvisibilityPotionListener implements Listener {
                 double intensity = event.getIntensity(player);
 
                 for (PotionEffect effect : event.getPotion().getEffects()) {
-                    BedWars.debug("Effect: " + effect.getType());
                     if (effect.getType().equals(PotionEffectType.INVISIBILITY)) {
                         int duration = (int) (effect.getDuration() * intensity);
-                        BedWars.debug("Adding invis with duration: " + duration);
                         PotionEffect pe = new PotionEffect(PotionEffectType.INVISIBILITY, duration, effect.getAmplifier());
                         player.addPotionEffect(pe, true);
                         handleInvisibility(player, a, pe);
@@ -184,7 +179,6 @@ public class InvisibilityPotionListener implements Listener {
     private void handleInvisibility(Player player, IArena arena, PotionEffect pe){
         // if is already invisible
         if (arena.getShowTime().containsKey(player)) {
-            BedWars.debug("Player is already invisible");
             ITeam t = arena.getTeam(player);
             // increase invisibility timer
             // keep trace of invisible players to send hide armor packet when required
@@ -193,7 +187,6 @@ public class InvisibilityPotionListener implements Listener {
             // call custom event
             Bukkit.getPluginManager().callEvent(new PlayerInvisibilityPotionEvent(PlayerInvisibilityPotionEvent.Type.ADDED, t, player, t.getArena()));
         } else {
-            BedWars.debug("Player is not invisible");
             // if not already invisible
             ITeam t = arena.getTeam(player);
             // keep track of invisible players to send hide armor packet when required

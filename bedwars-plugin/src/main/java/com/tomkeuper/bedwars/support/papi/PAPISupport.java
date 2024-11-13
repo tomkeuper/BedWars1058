@@ -208,7 +208,7 @@ public class PAPISupport extends PlaceholderExpansion {
                 team = arena.getTeam(player);
             else team = arena.getTeam(s.replace("team_status_", ""));
             if (team != null)
-                return !team.isBedDestroyed() ? lang.getString("format-sb-team-alive") : !team.getMembers().isEmpty() ? String.valueOf(team.getMembers().size()) : lang.getString("format-sb-team-eliminated");
+                return !team.isBedDestroyed() ? lang.getString(Messages.FORMATTING_SCOREBOARD_TEAM_ALIVE) : !team.getMembers().isEmpty() ? String.valueOf(team.getMembers().size()) : lang.getString(Messages.FORMATTING_SCOREBOARD_TEAM_ELIMINATED);
         }
         if (s.startsWith("team_color")) {
             ITeam team;

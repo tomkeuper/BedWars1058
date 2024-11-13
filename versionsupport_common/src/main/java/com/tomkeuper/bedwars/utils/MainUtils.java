@@ -82,8 +82,8 @@ public class MainUtils {
                     Material material = item.getItemStack().getType();
                     ItemMeta itemMeta = new ItemStack(material).getItemMeta();
 
-                    //Call ore pick up event
-                    if (!api.getAFKUtil().isPlayerAFK(p)){
+                    // Call ore pick up event
+                    if (!api.getAFKUtil().isPlayerAFK(p)) {
                         PlayerGeneratorCollectEvent event = new PlayerGeneratorCollectEvent(p, item, a, amount);
                         Bukkit.getPluginManager().callEvent(event);
                         if (event.isCancelled()) {

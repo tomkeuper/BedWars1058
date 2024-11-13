@@ -20,6 +20,9 @@
 
 package com.tomkeuper.bedwars.listeners;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,6 +31,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.ItemStack;
 
 import static com.tomkeuper.bedwars.support.version.common.VersionCommon.api;
 import static com.tomkeuper.bedwars.utils.MainUtils.*;
@@ -72,6 +76,7 @@ public class ItemDropPickListener {
     public static class ArrowCollect implements Listener {
         @EventHandler
         public void onArrowPick(PlayerPickupArrowEvent e){
+            Bukkit.getLogger().info("onArrowPick");
             if (api.getArenaUtil().isSpectating(e.getPlayer())) {
                 e.setCancelled(true);
             }
