@@ -138,8 +138,10 @@ public class BoardManager implements IScoreboardService {
         nameTagManager = TabAPI.getInstance().getNameTagManager();
         BossBarManager bossBarManager = TabAPI.getInstance().getBossBarManager();
         if (bossBarManager == null) BedWars.plugin.getLogger().warning("BossBar is disabled in TAB config! Please enable it there.\n Make sure to remove the ServerInfo default config if you want to use dragon boss-bars");
-        if (nameTagManager == null && BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_BELOW_NAME)) if (!(TabAPI.getInstance().getNameTagManager() instanceof UnlimitedNameTagManager))
-            Bukkit.getLogger().warning("Below name health is enabled in BedWars config but unlimited nametags is disabled in TAB config!");
+        if (nameTagManager == null && BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_BELOW_NAME)) {
+            if (BedWars.tabUnlimitedNameTagSupport) if (!(TabAPI.getInstance().getNameTagManager() instanceof UnlimitedNameTagManager))
+                    Bukkit.getLogger().warning("Below name health is enabled in BedWars config but unlimited nametags is disabled in TAB config!");
+        }
         if (tabListFormatManager == null) BedWars.plugin.getLogger().warning("TabList Format Manager is null! You dont have the tablist-name-formatting enabled in TAB config.\nWithout this feature the plugin will NOT work properly");
     }
 
@@ -359,7 +361,7 @@ public class BoardManager implements IScoreboardService {
             }
 
             // Set below name health if enabled in config
-            if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_BELOW_NAME)
+            if (BedWars.tabUnlimitedNameTagSupport && BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_HEALTH_BELOW_NAME)
                     && TabAPI.getInstance().getNameTagManager() instanceof UnlimitedNameTagManager) {
                 UnlimitedNameTagManager nameTagManager = (UnlimitedNameTagManager) TabAPI.getInstance().getNameTagManager();
                 if (nameTagManager != null) {
@@ -385,9 +387,11 @@ public class BoardManager implements IScoreboardService {
             nameTagManager.setSuffix(tabPlayer, "%bw_suffix%");
 
             tabListFormatManager.setName(tabPlayer,BedWars.config.getString(ConfigPath.SB_CONFIG_SIDEBAR_TAB_NAME));
-            if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_ABOVEHEAD_NAME_ENABLED) && TabAPI.getInstance().getNameTagManager() instanceof UnlimitedNameTagManager){
-                UnlimitedNameTagManager nameTagManager = (UnlimitedNameTagManager) TabAPI.getInstance().getNameTagManager();
-                nameTagManager.setName(tabPlayer,BedWars.config.getString(ConfigPath.SB_CONFIG_SIDEBAR_ABOVEHEAD_NAME));
+            if (BedWars.tabUnlimitedNameTagSupport) {
+                if (BedWars.config.getBoolean(ConfigPath.SB_CONFIG_SIDEBAR_ABOVEHEAD_NAME_ENABLED) && TabAPI.getInstance().getNameTagManager() instanceof UnlimitedNameTagManager){
+                    UnlimitedNameTagManager nameTagManager = (UnlimitedNameTagManager) TabAPI.getInstance().getNameTagManager();
+                    nameTagManager.setName(tabPlayer,BedWars.config.getString(ConfigPath.SB_CONFIG_SIDEBAR_ABOVEHEAD_NAME));
+                }
             }
 
         }, delay ? 5 : 0);

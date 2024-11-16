@@ -141,7 +141,7 @@ import java.util.*;
 public class BedWars extends JavaPlugin {
 
     private static ServerType serverType = ServerType.MULTIARENA;
-    public static boolean debug = true, autoscale = false, isPaper = false;
+    public static boolean debug = true, autoscale = false, isPaper = false, tabUnlimitedNameTagSupport = false;
     public static int hologramUpdateDistance = 50; // DEFAULT DISTANCE (update distance measured in blocks)
     public static String mainCmd = "bw", link = "https://polymart.org/resource/bedwars2023.5702";
     public static ConfigManager signs, generators;
@@ -720,8 +720,10 @@ public class BedWars extends JavaPlugin {
             this.getLogger().info("  - Scoreboard: " + (TabAPI.getInstance().getScoreboardManager() == null ? "false" : "true"));
             try {
                 this.getLogger().info("  - UnlimitedNameTag: " + ((TabAPI.getInstance().getNameTagManager() instanceof UnlimitedNameTagManager)  ? "true" : "false"));
+                tabUnlimitedNameTagSupport = true;
             } catch (NoClassDefFoundError e) {
                 this.getLogger().info("  - UnlimitedNameTag: not supported!");
+                tabUnlimitedNameTagSupport = false;
             }
             this.getLogger().info("  - BossBar: " + ((TabAPI.getInstance().getBossBarManager() == null)  ? "false" : "true"));
             this.getLogger().info("  - TablistNameFormatting: " + ((TabAPI.getInstance().getTabListFormatManager() == null)  ? "false" : "true"));
