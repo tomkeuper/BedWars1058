@@ -318,9 +318,6 @@ public enum TeamColor {
             case YELLOW:
                 color = Color.YELLOW;
                 break;
-            case DARK_GRAY:
-                color = Color.fromBGR(74, 74, 74);
-                break;
             case ORANGE:
                 color = Color.ORANGE;
                 break;
@@ -330,8 +327,11 @@ public enum TeamColor {
             case BLACK:
                 color = Color.BLACK;
                 break;
+            case DARK_GRAY:
+                color = Color.fromBGR(74, 74, 74);
+                break;
             case BROWN:
-                color = Color.fromBGR(139, 69, 19);
+                color = Color.fromBGR(19, 69, 139);
                 break;
             case DARK_BLUE:
                 color = Color.fromBGR(139, 0,  0);
