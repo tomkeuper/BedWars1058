@@ -334,7 +334,7 @@ public enum TeamColor {
                 color = Color.fromBGR(139, 69, 19);
                 break;
             case DARK_BLUE:
-                color = Color.fromBGR(0, 0, 139);
+                color = Color.fromBGR(139, 0,  0);
                 break;
         }
         return color;
