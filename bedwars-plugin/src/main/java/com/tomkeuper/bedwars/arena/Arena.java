@@ -515,7 +515,7 @@ public class Arena implements IArena {
             p.setHealth(p.getMaxHealth());
             for (Player on : players) {
                 Language language = Language.getPlayerLanguage(on);
-                if (ev.getMessage().equals("")){
+                if (ev.getMessage().equals("")) {
                     on.sendMessage(getMsg(language, p, Messages.COMMAND_JOIN_PLAYER_JOIN_MSG)
                             .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
                             .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
@@ -628,9 +628,9 @@ public class Arena implements IArena {
             }
         }
         if (!isStatusChange)
-            if (BedWars.getServerType() == ServerType.MULTIARENA || BedWars.getServerType() == ServerType.SHARED){
-                BoardManager.getInstance().giveTabFeatures(p,this, false);
-        }
+            if (BedWars.getServerType() == ServerType.MULTIARENA || BedWars.getServerType() == ServerType.SHARED) {
+                BoardManager.getInstance().giveTabFeatures(p, this, false);
+            }
 
         refreshSigns();
         JoinNPC.updateNPCs(getGroup());
@@ -691,7 +691,7 @@ public class Arena implements IArena {
             p.setGameMode(GameMode.ADVENTURE);
 
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if(leaving.contains(p)) return;
+                if (leaving.contains(p)) return;
                 p.setAllowFlight(true);
                 p.setFlying(true);
             }, 5L);
@@ -700,7 +700,7 @@ public class Arena implements IArena {
                 p.getPassenger().remove();
 
             Bukkit.getScheduler().runTask(plugin, () -> {
-                if(leaving.contains(p)) return;
+                if (leaving.contains(p)) return;
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on == p) continue;
                     if (getSpectators().contains(on)) {
@@ -785,7 +785,7 @@ public class Arena implements IArena {
      *                       player is the owner.
      */
     public void removePlayer(@NotNull Player p, boolean disconnect, boolean skipPartyCheck) {
-        if(leaving.contains(p)) {
+        if (leaving.contains(p)) {
             return;
         } else {
             leaving.add(p);
@@ -870,7 +870,7 @@ public class Arena implements IArena {
                 }
             } else if (alive_teams == 0 && !BedWars.isShuttingDown()) {
                 Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> changeStatus(GameState.restarting), 10L);
-            } else if(!BedWars.isShuttingDown()) {
+            } else if (!BedWars.isShuttingDown()) {
                 //ReJoin feature
                 new ReJoin(p, this, team, cacheList);
             }
@@ -914,13 +914,13 @@ public class Arena implements IArena {
         for (Player on : getPlayers()) {
             Language language = Language.getPlayerLanguage(on);
             on.sendMessage(getMsg(language, p, Messages.COMMAND_LEAVE_MSG)
-                            .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
-                            .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
-                            .replace("%bw_playername%", p.getName())
-                            .replace("%bw_player%", p.getDisplayName()
+                    .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
+                    .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
+                    .replace("%bw_playername%", p.getName())
+                    .replace("%bw_player%", p.getDisplayName()
                             .replace("%bw_on%", String.valueOf(getPlayers().size()))
                             .replace("%bw_max%", String.valueOf(getMaxPlayers()))
-                            )
+                    )
             );
         }
         for (Player on : getSpectators()) {
@@ -930,8 +930,8 @@ public class Arena implements IArena {
                     .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
                     .replace("%bw_playername%", p.getName())
                     .replace("%bw_player%", p.getDisplayName()
-                    .replace("%bw_on%", String.valueOf(getPlayers().size()))
-                    .replace("%bw_max%", String.valueOf(getMaxPlayers()))
+                            .replace("%bw_on%", String.valueOf(getPlayers().size()))
+                            .replace("%bw_max%", String.valueOf(getMaxPlayers()))
                     ));
 
         }
@@ -970,7 +970,7 @@ public class Arena implements IArena {
             p.removePotionEffect(pf.getType());
         }
 
-        if(!BedWars.isShuttingDown()) {
+        if (!BedWars.isShuttingDown()) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on.equals(p)) continue;
@@ -987,7 +987,7 @@ public class Arena implements IArena {
         }
 
         /* Check if party need to be left */
-        if (!skipPartyCheck){
+        if (!skipPartyCheck) {
             if (getPartyManager().hasParty(p)) {
                 if (getPartyManager().isOwner(p)) {
                     if (status != GameState.restarting) {
@@ -1063,7 +1063,7 @@ public class Arena implements IArena {
      *                       player is the owner.
      */
     public void removeSpectator(@NotNull Player p, boolean disconnect, boolean skipPartyCheck) {
-        if(leaving.contains(p)) {
+        if (leaving.contains(p)) {
             return;
         } else {
             leaving.add(p);
@@ -1108,7 +1108,7 @@ public class Arena implements IArena {
         }
         playerLocation.remove(p);
 
-        if(!BedWars.isShuttingDown()) {
+        if (!BedWars.isShuttingDown()) {
             Bukkit.getScheduler().runTask(plugin, () -> {
                 for (Player on : Bukkit.getOnlinePlayers()) {
                     if (on.equals(p)) continue;
@@ -1125,7 +1125,7 @@ public class Arena implements IArena {
         }
 
         /* Check if party need to be left */
-        if (!skipPartyCheck){
+        if (!skipPartyCheck) {
             if (getPartyManager().hasParty(p)) {
                 if (!getPartyManager().isOwner(p)) {
                     getPartyManager().removeFromParty(p);
@@ -1250,7 +1250,7 @@ public class Arena implements IArena {
         if (getStartingTask() != null) getStartingTask().cancel();
         if (getPlayingTask() != null) getPlayingTask().cancel();
         if (getAnnouncementTask() != null) getAnnouncementTask().cancel();
-        if (null != moneyperMinuteTask){
+        if (null != moneyperMinuteTask) {
             moneyperMinuteTask.cancel();
         }
         if (null != perMinuteTask) {
@@ -1546,7 +1546,7 @@ public class Arena implements IArena {
                 restartingTask.cancel();
         }
         restartingTask = null;
-        if (null != moneyperMinuteTask){
+        if (null != moneyperMinuteTask) {
             moneyperMinuteTask.cancel();
         }
         if (null != perMinuteTask) {
@@ -1727,10 +1727,10 @@ public class Arena implements IArena {
         if (!BedWars.config.getLobbyWorldName().equalsIgnoreCase(p.getWorld().getName())) return;
         p.getInventory().clear();
 
-        for (IPermanentItem lobbyItem: BedWars.getAPI().getItemUtil().getLobbyItems()) {
+        for (IPermanentItem lobbyItem : BedWars.getAPI().getItemUtil().getLobbyItems()) {
             ItemStack item = lobbyItem.getItem();
             ItemMeta itemMeta = lobbyItem.getItem().getItemMeta();
-            if (itemMeta != null){
+            if (itemMeta != null) {
                 String name;
                 List<String> lore;
 
@@ -1754,10 +1754,10 @@ public class Arena implements IArena {
     public void sendPreGameCommandItems(Player p) {
         p.getInventory().clear();
 
-        for (IPermanentItem preGameItem: BedWars.getAPI().getItemUtil().getPreGameItems()) {
+        for (IPermanentItem preGameItem : BedWars.getAPI().getItemUtil().getPreGameItems()) {
             ItemStack item = preGameItem.getItem();
             ItemMeta itemMeta = preGameItem.getItem().getItemMeta();
-            if (itemMeta != null){
+            if (itemMeta != null) {
                 String name;
                 List<String> lore;
 
@@ -1771,7 +1771,7 @@ public class Arena implements IArena {
                 item.setItemMeta(itemMeta);
             }
             if (preGameItem.getHandler().isVisible(p, this))
-            p.getInventory().setItem(preGameItem.getSlot(), item);
+                p.getInventory().setItem(preGameItem.getSlot(), item);
         }
     }
 
@@ -1782,10 +1782,10 @@ public class Arena implements IArena {
     public void sendSpectatorCommandItems(Player p) {
         p.getInventory().clear();
 
-        for (IPermanentItem lobbyItem: BedWars.getAPI().getItemUtil().getSpectatorItems()) {
+        for (IPermanentItem lobbyItem : BedWars.getAPI().getItemUtil().getSpectatorItems()) {
             ItemStack item = lobbyItem.getItem();
             ItemMeta itemMeta = lobbyItem.getItem().getItemMeta();
-            if (itemMeta != null){
+            if (itemMeta != null) {
                 String name;
                 List<String> lore;
 
@@ -1869,7 +1869,7 @@ public class Arena implements IArena {
                     Player thirdPlayer = null;
                     StringBuilder winners = new StringBuilder();
 
-                    for(int i = 0; i < winner.getMembers().size(); i++){
+                    for (int i = 0; i < winner.getMembers().size(); i++) {
                         Player p = winner.getMembers().get(i);
                         //Send winning title to the winner
                         if (p.getWorld().equals(getWorld())) {
@@ -1877,13 +1877,13 @@ public class Arena implements IArena {
                         }
                         //Build the winner format message
                         if (!winners.toString().contains(p.getDisplayName())) {
-                            if(winner.getSize() > 1 && i+1 != winner.getMembers().size()){
+                            if (winner.getSize() > 1 && i + 1 != winner.getMembers().size()) {
                                 winners.append(getMsg(p, Messages.FORMATTING_EACH_WINNER)
                                         .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
                                         .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
                                         .replace("%bw_playername%", p.getName())
                                         .replace("%bw_player%", p.getDisplayName())).append("§7, ");
-                            }else{
+                            } else {
                                 winners.append(getMsg(p, Messages.FORMATTING_EACH_WINNER)
                                         .replace("%bw_v_prefix%", getChatSupport().getPrefix(p))
                                         .replace("%bw_v_suffix%", getChatSupport().getSuffix(p))
@@ -2401,11 +2401,11 @@ public class Arena implements IArena {
                 despawnable.destroy();
             }
         }
-        for (ServerPlaceholder placeholder : serverPlaceholders){
+        for (ServerPlaceholder placeholder : serverPlaceholders) {
             TabAPI.getInstance().getPlaceholderManager().unregisterPlaceholder(placeholder);
         }
-        if (TabAPI.getInstance().getBossBarManager() != null){
-            for (BossBar bossBar : dragonBossbars){
+        if (TabAPI.getInstance().getBossBarManager() != null) {
+            for (BossBar bossBar : dragonBossbars) {
                 bossBar.getPlayers().forEach(bossBar::removePlayer);
             }
             dragonBossbars = null;
@@ -2541,7 +2541,7 @@ public class Arena implements IArena {
     public void setAllowEnderDragonDestroy(boolean allowDestory) {
         this.enderDragonDestory = allowDestory;
     }
-  
+
     @Override
     public int getMagicMilkTime() {
         return magicMilkTime;
@@ -2559,43 +2559,43 @@ public class Arena implements IArena {
 
     @Override
     public boolean startReSpawnSession(Player player, int seconds) {
-        if (respawnSessions.get(player) == null) {
-            IArena arena = Arena.getArenaByPlayer(player);
-            if (arena == null) {
-                return false;
+        if (respawnSessions.get(player) != null) {
+            return false;
+        }
+        IArena arena = Arena.getArenaByPlayer(player);
+        if (arena == null) {
+            return false;
+        }
+        if (!arena.isPlayer(player)) {
+            return false;
+        }
+        player.getInventory().clear();
+        if (seconds > 1) {
+            // hide to others
+            for (Player playing : arena.getPlayers()) {
+                if (playing.equals(player)) continue;
+                BedWars.nms.spigotHidePlayer(player, playing);
             }
-            if (!arena.isPlayer(player)) {
-                return false;
-            }
-            player.getInventory().clear();
-            if (seconds > 1) {
-                // hide to others
-                for (Player playing : arena.getPlayers()) {
-                    if (playing.equals(player)) continue;
-                    BedWars.nms.spigotHidePlayer(player, playing);
-                }
-                PaperSupport.teleportC(player, getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            PaperSupport.teleportC(player, getReSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+            player.setAllowFlight(true);
+            player.setFlying(true);
+
+            respawnSessions.put(player, seconds);
+            Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
                 player.setAllowFlight(true);
                 player.setFlying(true);
+                player.setFireTicks(0);
 
-                respawnSessions.put(player, seconds);
-                Bukkit.getScheduler().runTaskLater(BedWars.plugin, () -> {
-                    player.setAllowFlight(true);
-                    player.setFlying(true);
-                    player.setFireTicks(0);
-
-                    nms.setCollide(player, this, false);
-                    for (Player invisible : getShowTime().keySet()) {
-                        BedWars.nms.hideArmor(invisible, player);
-                    }
-                }, 5L);
-            } else {
-                ITeam team = getTeam(player);
-                team.respawnMember(player);
-            }
-            return true;
+                nms.setCollide(player, this, false);
+                for (Player invisible : getShowTime().keySet()) {
+                    BedWars.nms.hideArmor(invisible, player);
+                }
+            }, 5L);
+        } else {
+            ITeam team = getTeam(player);
+            team.respawnMember(player);
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -2613,7 +2613,8 @@ public class Arena implements IArena {
             if (ar.getArenaName().equalsIgnoreCase(arenaName)) return false;
         }
 
-        if (Arena.getGamesBeforeRestart() != -1 && Arena.getArenas().size() >= Arena.getGamesBeforeRestart()) return false;
+        if (Arena.getGamesBeforeRestart() != -1 && Arena.getArenas().size() >= Arena.getGamesBeforeRestart())
+            return false;
 
         int activeClones = 0;
         for (IArena ar : Arena.getArenas()) {
@@ -2622,7 +2623,7 @@ public class Arena implements IArena {
                 if (ar.getStatus() == GameState.waiting || ar.getStatus() == GameState.starting) return false;
             }
             // count active clones
-            if (ar.getArenaName().equals(arenaName)){
+            if (ar.getArenaName().equals(arenaName)) {
                 activeClones++;
             }
         }
@@ -2702,7 +2703,7 @@ public class Arena implements IArena {
     }
 
     @Override
-    public List<BossBar> getDragonBossbars(){
+    public List<BossBar> getDragonBossbars() {
         return dragonBossbars;
     }
 
@@ -2738,8 +2739,8 @@ public class Arena implements IArena {
      * Use only for 1.8 servers as they don't support BossBar packets
      */
     public void set1_8BossBarName(ITeam team, EnderDragon dragon) {
-        for (Player player : team.getArena().getPlayers()){
-            String name = Language.getMsg(player, Messages.FORMATTING_BOSSBAR_DRAGON).replace("%bw_team%", team.getColor().chat()+team.getName()).replace("%bw_team_color%", String.valueOf(team.getColor().chat())).replace("%bw_team_name%", team.getDisplayName(getPlayerLanguage(player))).replace("%bw_team_letter%", String.valueOf(team.getName().length() != 0 ? team.getName().charAt(0) : ""));
+        for (Player player : team.getArena().getPlayers()) {
+            String name = Language.getMsg(player, Messages.FORMATTING_BOSSBAR_DRAGON).replace("%bw_team%", team.getColor().chat() + team.getName()).replace("%bw_team_color%", String.valueOf(team.getColor().chat())).replace("%bw_team_name%", team.getDisplayName(getPlayerLanguage(player))).replace("%bw_team_letter%", String.valueOf(team.getName().length() != 0 ? team.getName().charAt(0) : ""));
             dragon.setCustomName(name);
         }
     }
@@ -2753,12 +2754,12 @@ public class Arena implements IArena {
             BedWars.plugin.getLogger().warning("BossBar is disabled in TAB config! Please enable it there.\n Make sure to remove the ServerInfo default config if you want to use dragon bossbars");
             return;
         }
-        String dragonPlaceholderName = "%bw_"+team.getArena().getWorldName()+"_"+team.getName() + "+" + dragonNumber + "%";
-        ServerPlaceholder dragonPlaceholder = TabAPI.getInstance().getPlaceholderManager().registerServerPlaceholder(dragonPlaceholderName, 500,  () -> team.getDragons().get(dragonNumber).getHealth()/team.getDragons().get(dragonNumber).getMaxHealth()*100);
+        String dragonPlaceholderName = "%bw_" + team.getArena().getWorldName() + "_" + team.getName() + "+" + dragonNumber + "%";
+        ServerPlaceholder dragonPlaceholder = TabAPI.getInstance().getPlaceholderManager().registerServerPlaceholder(dragonPlaceholderName, 500, () -> team.getDragons().get(dragonNumber).getHealth() / team.getDragons().get(dragonNumber).getMaxHealth() * 100);
         serverPlaceholders.add(dragonPlaceholder);
-        for (Player player : team.getArena().getPlayers()){
-            String name = Language.getMsg(player, Messages.FORMATTING_BOSSBAR_DRAGON).replace("%bw_team%", team.getColor().chat()+team.getName()).replace("%bw_team_color%", String.valueOf(team.getColor().chat())).replace("%bw_team_name%", team.getDisplayName(getPlayerLanguage(player))).replace("%bw_team_letter%", String.valueOf(team.getName().length() != 0 ? team.getName().charAt(0) : ""));
-            BossBar bb = TabAPI.getInstance().getBossBarManager().createBossBar( name, dragonPlaceholderName, String.valueOf(team.getColor()), "PROGRESS");
+        for (Player player : team.getArena().getPlayers()) {
+            String name = Language.getMsg(player, Messages.FORMATTING_BOSSBAR_DRAGON).replace("%bw_team%", team.getColor().chat() + team.getName()).replace("%bw_team_color%", String.valueOf(team.getColor().chat())).replace("%bw_team_name%", team.getDisplayName(getPlayerLanguage(player))).replace("%bw_team_letter%", String.valueOf(team.getName().length() != 0 ? team.getName().charAt(0) : ""));
+            BossBar bb = TabAPI.getInstance().getBossBarManager().createBossBar(name, dragonPlaceholderName, String.valueOf(team.getColor()), "PROGRESS");
             bb.addPlayer(Objects.requireNonNull(TabAPI.getInstance().getPlayer(player.getUniqueId())));
             dragonBossbars.add(bb);
         }
