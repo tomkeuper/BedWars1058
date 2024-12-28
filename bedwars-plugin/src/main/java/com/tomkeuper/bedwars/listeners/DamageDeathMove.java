@@ -127,7 +127,6 @@ public class DamageDeathMove implements Listener {
         }
     }
 
-    //Todo show player health on bow hit
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBowHit(EntityDamageByEntityEvent e) {
         if (e.isCancelled()) return;
