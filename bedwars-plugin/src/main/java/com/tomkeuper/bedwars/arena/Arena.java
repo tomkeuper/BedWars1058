@@ -1307,7 +1307,7 @@ public class Arena implements IArena {
      * @param p Target player
      * @return The arena where the player is in. Can be NULL.
      */
-    public static IArena getArenaByPlayer(Player p) {
+    public static @Nullable IArena getArenaByPlayer(Player p) {
         return arenaByPlayer.get(p);
     }
 
