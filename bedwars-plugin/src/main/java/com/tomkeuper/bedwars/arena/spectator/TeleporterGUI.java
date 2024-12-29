@@ -23,6 +23,7 @@ package com.tomkeuper.bedwars.arena.spectator;
 import com.tomkeuper.bedwars.BedWars;
 import com.tomkeuper.bedwars.api.arena.IArena;
 import com.tomkeuper.bedwars.api.arena.team.ITeam;
+import com.tomkeuper.bedwars.api.configuration.ConfigPath;
 import com.tomkeuper.bedwars.api.language.Language;
 import com.tomkeuper.bedwars.api.language.Messages;
 import com.tomkeuper.bedwars.arena.Arena;
@@ -66,12 +67,23 @@ public class TeleporterGUI {
             p.closeInventory();
             return;
         }
+
         List<Player> players = arena.getPlayers();
-        for (int i = 0; i < inv.getSize(); i++) {
+        String[] slotStrings = BedWars.config.getYml().getString(ConfigPath.GENERAL_CONFIGURATION_TELEPORTER_SLOTS).split(",");
+        List<Integer> slots = new ArrayList<>();
+        for (String slot : slotStrings) {
+            try {
+                slots.add(Integer.parseInt(slot));
+            } catch (NumberFormatException ignored) {
+                // Ignore invalid slot numbers
+            }
+        }
+
+        for (int i = 0; i < slots.size(); i++) {
             if (i < players.size()) {
-                inv.setItem(i, createHead(players.get(i), p));
+                inv.setItem(slots.get(i), createHead(players.get(i), p));
             } else {
-                inv.setItem(i, new ItemStack(Material.AIR));
+                inv.setItem(slots.get(i), new ItemStack(Material.AIR));
             }
         }
     }
@@ -83,11 +95,9 @@ public class TeleporterGUI {
         IArena arena = Arena.getArenaByPlayer(p);
         if (arena == null) return;
 
-        int playerCount = arena.getPlayers().size();
-        int size = (playerCount % 9) == 0 ? playerCount : ((int) Math.ceil(playerCount / 9.0)) * 9;
-        if (size > 54) {
-            size = 54;
-        }
+        int size = BedWars.config.getYml().getInt(ConfigPath.GENERAL_CONFIGURATION_TELEPORTER_GUI_SIZE);
+        if (size % 9 != 0) size = 27; // Ensure size is a multiple of 9 otherwise set to 27
+        if (size > 54) size = 54; // Limit size to maximum 54
 
         Inventory inv = Bukkit.createInventory(p, size, getMsg(p, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_NAME));
         refreshInv(p, inv);
@@ -107,11 +117,11 @@ public class TeleporterGUI {
     /**
      * Create a player head
      */
-    private static ItemStack createHead(Player targetPlayer, Player GUIholder) {
+    private static ItemStack createHead(Player targetPlayer, Player player) {
         ItemStack i = nms.getPlayerHead(targetPlayer, null);
         ItemMeta im = i.getItemMeta();
         assert im != null;
-      
+
         IArena currentArena = Arena.getArenaByPlayer(targetPlayer);
         ITeam targetPlayerTeam = currentArena.getTeam(targetPlayer);
         im.setDisplayName(getMsg(targetPlayer, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_NAME)
@@ -119,11 +129,11 @@ public class TeleporterGUI {
                 .replace("%bw_v_suffix%", BedWars.getChatSupport().getSuffix(targetPlayer))
                 .replace("%bw_player%", targetPlayer.getDisplayName())
                 .replace("%bw_team_color%", String.valueOf(targetPlayerTeam.getColor().chat()))
-                .replace("%bw_team%", targetPlayerTeam.getDisplayName(Language.getPlayerLanguage(GUIholder)))
+                .replace("%bw_team%", targetPlayerTeam.getDisplayName(Language.getPlayerLanguage(player)))
                 .replace("%bw_playername%", targetPlayer.getName()));
         List<String> lore = new ArrayList<>();
         String health = String.valueOf((int)targetPlayer.getHealth() * 100 / targetPlayer.getHealthScale());
-        for (String s : getList(GUIholder, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE)) {
+        for (String s : getList(player, Messages.ARENA_SPECTATOR_TELEPORTER_GUI_HEAD_LORE)) {
             lore.add(s.replace("%bw_player_health%", health).replace("%bw_player_food%", String.valueOf(targetPlayer.getFoodLevel())));
         }
         im.setLore(lore);
