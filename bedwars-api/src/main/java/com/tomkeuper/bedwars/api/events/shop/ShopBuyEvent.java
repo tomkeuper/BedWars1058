@@ -39,6 +39,7 @@ public class ShopBuyEvent extends Event implements Cancellable {
     private final Player buyer;
     private final IArena arena;
     private final ICategoryContent categoryContent;
+    private final int slot;
     private IShopCache shopCache;
     private boolean cancelled = false;
 
@@ -50,11 +51,12 @@ public class ShopBuyEvent extends Event implements Cancellable {
      * @param categoryContent  The category content from the shop where the purchase was made.
      * @param shopCache         The cache that contains the items bought by the player.
      */
-    public ShopBuyEvent(Player buyer, IArena arena, ICategoryContent categoryContent, IShopCache shopCache) {
+    public ShopBuyEvent(Player buyer, IArena arena, ICategoryContent categoryContent, IShopCache shopCache, int slot) {
         this.categoryContent = categoryContent;
         this.buyer = buyer;
         this.arena = arena;
         this.shopCache = shopCache;
+        this.slot = slot;
     }
 
     /**
@@ -100,6 +102,14 @@ public class ShopBuyEvent extends Event implements Cancellable {
      */
     public void setShopCache(IShopCache shopCache) {
         this.shopCache = shopCache;
+    }
+
+    /**
+     * Gets the slot where the purchase was made.
+     * @return The slot.
+     */
+    public int getSlot() {
+        return slot;
     }
 
     @Override
