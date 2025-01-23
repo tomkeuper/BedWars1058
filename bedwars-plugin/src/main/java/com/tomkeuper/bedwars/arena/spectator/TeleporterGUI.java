@@ -129,7 +129,7 @@ public class TeleporterGUI {
                 .replace("%bw_v_suffix%", BedWars.getChatSupport().getSuffix(targetPlayer))
                 .replace("%bw_player%", targetPlayer.getDisplayName())
                 .replace("%bw_team_color%", String.valueOf(targetPlayerTeam.getColor().chat()))
-                .replace("%bw_team%", targetPlayerTeam.getDisplayName(Language.getPlayerLanguage(player)))
+                .replace("%bw_team%", targetPlayerTeam.getDisplayName(Language.getPlayerLanguage(GUIholder)))
                 .replace("%bw_playername%", targetPlayer.getName()));
         List<String> lore = new ArrayList<>();
         String health = String.valueOf((int)targetPlayer.getHealth() * 100 / targetPlayer.getHealthScale());
