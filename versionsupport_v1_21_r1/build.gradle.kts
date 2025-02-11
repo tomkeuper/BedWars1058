@@ -20,7 +20,7 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven("https://repo.codemc.io/repository/nms/") // Spigot
-    maven("https://papermc.io/repo/repository/maven-public/") // com.mojang (dep of Spigot)
+    maven("https://repo.papermc.io/repository/maven-public/") // com.mojang (dep of Spigot)
     maven("https://jitpack.io") // Jitpack (RTag)
 }
 

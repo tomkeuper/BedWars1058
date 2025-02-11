@@ -12,7 +12,7 @@ repositories {
     mavenCentral()
     mavenLocal()
     // Important Repos
-    maven("https://papermc.io/repo/repository/maven-public/") // PaperLib
+    maven("https://repo.papermc.io/repository/maven-public/") // PaperLib
     maven("https://repo.codemc.io/repository/nms/") // Spigot
     maven("https://repo.codemc.io/repository/maven-public/") // VipFeatures
     maven("https://simonsator.de/repo/") // Party-and-Friends-MySQL-Edition-Spigot-API, Spigot-Party-API-For-RedisBungee

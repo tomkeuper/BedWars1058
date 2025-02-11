@@ -15,7 +15,7 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven("https://repo.codemc.io/repository/nms/") // Spigot
-    maven("https://papermc.io/repo/repository/maven-public/") // com.mojang (dep of Spigot)
+    maven("https://repo.papermc.io/repository/maven-public/") // com.mojang (dep of Spigot)
 }
 
 description = "versionsupport_v1_20_r2"

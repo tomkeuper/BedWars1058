@@ -15,6 +15,6 @@ repositories {
     mavenCentral()
     mavenLocal()
     maven("https://repo.codemc.io/repository/nms/") // Spigot
-    maven("https://papermc.io/repo/repository/maven-public/") // bungeecord-chat (dep of spigot-api)
+    maven("https://repo.papermc.io/repository/maven-public/") // bungeecord-chat (dep of spigot-api)
     maven("https://repo.glaremasters.me/repository/concuncan/") // slimeworldmanager-api
 }
